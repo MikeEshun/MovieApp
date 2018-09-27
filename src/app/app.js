@@ -1,3 +1,8 @@
+import Vue from 'vue';
+import VueRouter from "vue-router";
+
+Vue.use(VueRouter);
+
 const DunkirkBlurb = {
   name: 'dunkirk-blurb',
   template: `<div>
@@ -50,50 +55,35 @@ const routes = [
   {
     path: '/the-dark-knight-rises',
     component: TheDarkKnightRisesBlurb
+  },
+  {
+    path: '*',
+    component: {
+      name: 'not-found-blurb',
+      template: `<h2>Not Found :(. Pick a movie from the menu above!</h2>`
+    }
   }
 ];
 
 
-const View = {
-  name: 'router-view',
-  template: `<component :is="currentView"></component>`,
-  data: () => ({
-    currentView: {}
-  }),
-  created() {
-    if (this.getRouteObject() === undefined) {
-      this.currentView = {
-        template: `<h2>Not Found :(. Pick a movie from the list!</h2>`
-      };
-    } else {
-      this.currentView = this.getRouteObject().component;
-    }
-  },
-  methods: {
-    getRouteObject() {
-      return routes.find(
-        route => route.path === window.location.pathname
-      ); 
-    },
-  },
-};
-
-
-const App = {
+export const App = {
   name: 'App',
   template: `<div id="app">
     <div class="movies">
       <h2>Which movie?</h2>
-      <a href="/dunkirk">/dunkirk</a>
-      <a href="/interstellar">/interstellar</a>
-      <a href="/the-dark-knight-rises">/the-dark-knight-rises</a>
+      <router-link to="/dunkirk">/dunkirk</router-link>
+      <router-link to="/interstellar">/interstellar</router-link>
+      <router-link to="/the-dark-knight-rises">/the-dark-knight-rises</router-link>
 
       <router-view></router-view>
     </div>
   </div>`,
-  components: {
-    'router-view': View
-  }
 };
 
-export default App;
+
+export const router = VueRouter({
+  mode: 'history',
+  routes
+});
+
+// export default App;
